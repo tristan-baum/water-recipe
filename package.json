@@ -1,0 +1,9 @@
+{
+  "name": "wasserrezepte",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mineralisierungs-Rezepte für Kaffeewasser (Web-App, installierbar)",
+  "scripts": {
+    "test": "node test/lotus-check.js"
+  }
+}
