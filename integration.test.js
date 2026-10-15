@@ -81,6 +81,17 @@ ev("window.sh='';render();startTut()");
 chk(!!w.document.querySelector('#tut') && ev('ACT.length') == 18, 'Tutorial startet mit allen 18 Schritten');
 let tg2 = 0; while (w.document.querySelector('#tut') && tg2++ < 40) w.document.querySelector('#tunx').click();
 chk(!w.document.querySelector('#tut') && ev('S.tut') == 1 && ev('mode') == "list", 'Tutorial lässt sich durchklicken und merkt sich, dass es gesehen wurde');
+
+// --- Flaschennamen nur in der Tropfen-Box englisch
+ev("cur=R[0].id;mode='d';render()");
+const tn = JSON.parse(ev("JSON.stringify([...document.querySelectorAll('#dp .tn')].map(e=>e.textContent))"));
+chk(tn.join() == 'Magnesium,Calcium,Sodium,Potassium', 'Tropfen-Box: englische Namen wie auf den Flaschen');
+chk(ev("[...document.querySelectorAll('.tg')][0].textContent").includes('Natrium'), 'Zielwerte: Namen in der eingestellten Sprache');
+ev("document.querySelector('#inf').click()");
+chk(!!w.document.querySelector('.ifo'), 'Info-Fenster zu den Flaschennamen öffnet');
+ev("document.querySelector('.ifo button').click()");
+chk(!w.document.querySelector('.ifo'), 'Info-Fenster schließt');
+ev("mode='list';cur=null;render()");
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);
