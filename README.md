@@ -9,7 +9,9 @@ Web-App (installierbar, offlinefähig) für Mineralisierungs-Rezepte von Kaffeew
 - Rezepte in ppm (als CaCO₃) mit Tropfenzahl für runde und gerade Spitze, Menge in mL, l oder gal
 - Ausgangswasser: Destilliertes Wasser als Voreinstellung, eigene Wasser benennen und speichern, pro Rezept anpassbar
 - Hardness-/Alkalinity-Diagramm mit Soll- und Ist-Wert (Ist = mit ganzen Tropfen)
-- Rezepte vergleichen, filtern (Brühmethode, Alkalinität) und sortieren; die eigene Reihenfolge bleibt erhalten
+- Rezepte vergleichen, filtern (Brühmethode, Bewertung, Hardness, Alkalinität) und sortieren; die eigene Reihenfolge bleibt erhalten
+- Standard-Brühmethoden (Filter, AeroPress, Espresso, French Press) sind fest, eigene Methoden lassen sich anlegen und löschen
+- Liegt das Ausgangswasser über dem Ziel, bleibt der Zielwert stehen und die Übersicht zeigt den höheren Wert mit Pfeil
 - Wischen zum Löschen, langes Halten zum Umsortieren, Hell/Dunkel/Geräteeinstellung, Deutsch und Englisch
 
 ## Veröffentlichen mit GitHub Pages
