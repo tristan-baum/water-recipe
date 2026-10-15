@@ -67,7 +67,7 @@ ev("S.vf={sort:'hd_asc',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:2}");
 const hd = JSON.parse(ev('JSON.stringify(vlist().map(r=>tg(r).gh))'));
 chk(hd.every((v, i) => i == 0 || v >= hd[i - 1]) && ev('vlist().every(r=>r.rating>=2)'), 'Hardness-Sortierung und Mindestbewertung');
 ev("S.vf={sort:'own',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:0};R[0].sc=true;R[0].src={mg:100,ca:0,na:0,k:0,cl:0,hco3:0};window.sh='';render()");
-chk(w.document.querySelectorAll('.rc .ov').length >= 1, 'Ausgangswasser über dem Ziel ist in der Übersicht markiert');
+chk(w.document.querySelectorAll('.rc .ov').length >= 1 && /^\+\d+$/.test(w.document.querySelector('.rc .ov').textContent), 'Ausgangswasser über dem Ziel ist in der Übersicht als +Differenz markiert');
 chk(ev('Math.round(tg(R[0]).gh)') == ev('Math.round(R[0].ppm.mg+0.929*R[0].ppm.ca)'), 'Zielwert bleibt unverändert');
 ev("window.sh='new';render()");
 const nm = JSON.parse(ev("JSON.stringify([...document.querySelectorAll('[data-c]')].map(b=>b.textContent))"));
