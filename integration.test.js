@@ -73,6 +73,14 @@ ev("window.sh='new';render()");
 const nm = JSON.parse(ev("JSON.stringify([...document.querySelectorAll('[data-c]')].map(b=>b.textContent))"));
 chk(nm.every((v, i) => i == 0 || nm[i - 1].localeCompare(v, 'de', { sensitivity: 'base', numeric: true }) <= 0), 'Eigene Rezepte alphabetisch');
 chk(!!w.document.querySelector('.sh .grab') && ev("document.documentElement.classList.contains('lk')"), 'Schließen-Balken vorhanden und Hintergrund gesperrt');
+
+// --- Tutorial
+ev("window.sh='menu';render()");
+chk(!!w.document.querySelector('#ot'), 'Menü enthält „Tutorial starten“');
+ev("window.sh='';render();startTut()");
+chk(!!w.document.querySelector('#tut') && ev('ACT.length') == 18, 'Tutorial startet mit allen 18 Schritten');
+let tg2 = 0; while (w.document.querySelector('#tut') && tg2++ < 40) w.document.querySelector('#tunx').click();
+chk(!w.document.querySelector('#tut') && ev('S.tut') == 1 && ev('mode') == "list", 'Tutorial lässt sich durchklicken und merkt sich, dass es gesehen wurde');
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);

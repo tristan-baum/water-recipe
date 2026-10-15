@@ -12,6 +12,7 @@ Web-App (installierbar, offlinefähig) für Mineralisierungs-Rezepte von Kaffeew
 - Rezepte vergleichen, filtern (Brühmethode, Bewertung, Hardness, Alkalinität) und sortieren; die eigene Reihenfolge bleibt erhalten
 - Standard-Brühmethoden (Filter, AeroPress, Espresso, French Press) sind fest, eigene Methoden lassen sich anlegen und löschen
 - Liegt das Ausgangswasser über dem Ziel, bleibt der Zielwert stehen und die Übersicht zeigt den höheren Wert mit Pfeil
+- Tutorial: startet beim ersten Öffnen, führt durch alle Funktionen und lässt sich jederzeit im Menü neu starten
 - Wischen zum Löschen, langes Halten zum Umsortieren, Hell/Dunkel/Geräteeinstellung, Deutsch und Englisch
 
 ## Veröffentlichen mit GitHub Pages
