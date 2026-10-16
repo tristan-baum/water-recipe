@@ -156,6 +156,52 @@ ev("window.sh='';mode='list';cur=null;render();window.dl=R[0].id;window.sh='del'
 chk(ev("document.querySelector('.swc[data-w=\"'+R[0].id+'\"]').style.zIndex") == '5', 'Gewischtes Rezept liegt vor den Nachbarkarten');
 ev("document.querySelector('#dn').click()");
 ev("window.sh='';mode='list';cur=null;render()");
+
+// --- Filter: einklappbar, Slider, getrennte Sortierung
+ev("window.sh='';mode='list';cur=null;S.vf={sort:'own',dir:'asc',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:0,rmax:''};render();window.sh='flt';render()");
+chk(w.document.querySelectorAll('.rs').length == 3 && w.document.querySelectorAll('[data-fs]').length == 5, 'Filter: drei Slider und fünf einklappbare Bereiche');
+ev("document.querySelector('[data-fs=\"m\"]').click()");
+chk(ev('S.fc.m') === true && w.document.querySelector('[data-fs="m"]').nextElementSibling.classList.contains('c'), 'Filterbereich lässt sich zuklappen');
+ev("document.querySelector('[data-fs=\"m\"]').click()");
+chk(ev('S.fc.m') === false, 'Filterbereich lässt sich wieder aufklappen');
+chk(w.document.querySelectorAll('[data-sc]').length == 4 && w.document.querySelectorAll('[data-sdr]').length == 2, 'Sortierung: Kriterium und Richtung getrennt');
+ev("document.querySelector('[data-sc=\"hd\"]').click()");
+ev("document.querySelector('[data-sdr=\"desc\"]').click()");
+chk(ev('S.vf.sort') == 'hd_desc', 'Sortierung: Hardness absteigend aus zwei getrennten Auswahlen');
+ev("document.querySelector('[data-sc=\"own\"]').click()");
+chk(ev('S.vf.sort') == 'own' && w.document.querySelector('[data-sdr]').classList.contains('dis'), 'Eigene Reihenfolge: Richtung ist deaktiviert');
+{
+  const inp = w.document.querySelectorAll('.rs[data-rk="h"] input');
+  inp[0].value = '60'; inp[0].dispatchEvent(new w.Event('input')); inp[0].dispatchEvent(new w.Event('change'));
+}
+chk(ev('S.vf.hmin') == 60 && ev('vlist().every(r=>tg(r).gh>=60)'), 'Hardness-Slider setzt den Mindestwert und filtert');
+{
+  const inp = w.document.querySelectorAll('.rs[data-rk="r"] input');
+  inp[1].value = '3'; inp[1].dispatchEvent(new w.Event('input')); inp[1].dispatchEvent(new w.Event('change'));
+}
+chk(ev('S.vf.rmax') == 3 && ev('vlist().every(r=>(r.rating||0)<=3)'), 'Bewertungs-Slider setzt den Höchstwert und filtert');
+ev("document.querySelector('#frs').click()");
+chk(ev('vfOn()') === false, 'Zurücksetzen leert alle Slider-Filter');
+ev("window.sh='';mode='list';render()");
+chk(w.document.querySelectorAll('.nm.mq').length >= 1, 'Rezeptnamen laufen in einer Zeile (Laufschrift bei Überlänge)');
+
+// --- Fenster: Wischen
+ev("window.cm=true;sel=[R[0].id,R[1].id];window.sh='cmp';render()");
+ev("sheetDone()");
+chk(ev('window.cm') === false && ev('sel.length') === 0 && ev('window.sh') === '', 'Schließen des Vergleichs deaktiviert den Vergleich');
+const touch = (el, type, x, y) => { const e = new w.Event(type, { bubbles: true, cancelable: true }); e.touches = [{ clientX: x, clientY: y }]; el.dispatchEvent(e); };
+ev("window.sh='water';render()");
+{
+  const sheet = w.document.querySelector('.sh');
+  touch(sheet, 'touchstart', 20, 200); touch(sheet, 'touchmove', 140, 205); touch(sheet, 'touchend', 140, 205);
+}
+chk(ev('window.sh') == 'menu', 'Nach rechts wischen geht im Menü einen Schritt zurück');
+{
+  const sheet = w.document.querySelector('.sh');
+  touch(sheet, 'touchstart', 20, 200); touch(sheet, 'touchmove', 140, 205); touch(sheet, 'touchend', 140, 205);
+}
+chk(ev('window.sh') == 'menu', 'Im Hauptmenü gibt es kein Zurück per Wischen');
+ev("window.sh='';mode='list';render()");
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);
