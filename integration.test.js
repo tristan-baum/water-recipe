@@ -150,6 +150,12 @@ ev("window.__cardEl=document.querySelector('.swc');document.querySelector('.rc')
 chk(ev("window.sh")=='del' && !!w.document.querySelector('.sh #dy') && ev("document.querySelector('.swc')===window.__cardEl"), 'Rückfrage erscheint, ohne die Liste neu zu zeichnen');
 ev("document.querySelector('#dn').click()");
 chk(ev("window.sh")==='' && ev("document.querySelector('.swc')===window.__cardEl") && ev("document.querySelector('.rc').style.transform")==='', 'Abbrechen ohne Neuzeichnen: dieselbe Karte schwingt zurück');
+
+// --- Gewischtes Rezept liegt im Vordergrund
+ev("window.sh='';mode='list';cur=null;render();window.dl=R[0].id;window.sh='del';render()");
+chk(ev("document.querySelector('.swc[data-w=\"'+R[0].id+'\"]').style.zIndex") == '5', 'Gewischtes Rezept liegt vor den Nachbarkarten');
+ev("document.querySelector('#dn').click()");
+ev("window.sh='';mode='list';cur=null;render()");
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);
