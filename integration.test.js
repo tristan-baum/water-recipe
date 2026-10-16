@@ -9,9 +9,9 @@ const errors = [];
 let ok = true;
 const chk = (c, m) => { console.log((c ? 'OK   ' : 'FEHLER ') + m); if (!c) ok = false; };
 
-function boot(store) {
+function boot(store, url) {
   return new JSDOM(html, {
-    url: 'https://example.github.io/wasserrezepte/', runScripts: 'dangerously', pretendToBeVisual: true,
+    url: url || 'https://example.github.io/wasserrezepte/', runScripts: 'dangerously', pretendToBeVisual: true,
     beforeParse(w) {
       for (const [k, v] of Object.entries(store)) w.localStorage.setItem(k, v);
       w.matchMedia = () => ({ matches: false });
@@ -92,6 +92,64 @@ chk(!!w.document.querySelector('.ifo'), 'Info-Fenster zu den Flaschennamen öffn
 ev("document.querySelector('.ifo button').click()");
 chk(!w.document.querySelector('.ifo'), 'Info-Fenster schließt');
 ev("mode='list';cur=null;render()");
+
+// --- Duplizieren, Teilen, Importieren
+ev("window.sh='';mode='list';cur=null;render()");
+ev("cur=R[0].id;mode='d';render();document.querySelector('#du').click()");
+chk(ev("R[0].name.endsWith('(2)')") && w.document.activeElement && w.document.activeElement.classList.contains('hn'), 'Duplizieren: neues Rezept offen, Name ausgewählt');
+ev("mode='list';cur=null;render()");
+const code = ev("b64e(Object.assign({},R[0],{id:undefined}))");
+chk(!/[+\/=]/.test(code), 'Teilen-Link ist URL-sicher');
+const link = ev("'https://example.github.io/wasserrezepte/#r='+b64e(Object.assign({},R[0],{name:'Geteilt',id:undefined,notes:'<b>x</b>'}))");
+const w2 = boot({}, link);
+chk(w2.eval("R.some(r=>r.name=='Geteilt')") && w2.location.hash === '', 'Link öffnen: Rezept wird gespeichert und Link bereinigt');
+chk(w2.eval("R[0].ppm.mg==" + ev('R[0].ppm.mg') + "&&R[0].drop=='" + ev('R[0].drop') + "'"), 'Importiertes Rezept hat dieselben Werte');
+const n0 = ev('R.length');
+ev("window.sh='imp';render()");
+w.document.querySelector('#imt').value = 'Schau mal: ' + link + ' Viel Spaß';
+ev("document.querySelector('#imb').click()");
+chk(ev('R.length') == n0 + 1 && ev("R[0].name=='Geteilt'"), 'Import per Einfügen (ganze Nachricht)');
+ev("window.sh='imp';render()");
+w.document.querySelector('#imt').value = 'kein rezept';
+ev("document.querySelector('#imb').click()");
+chk(ev('R.length') == n0 + 1 && !w.document.querySelector('#imr').hidden, 'Ungültiger Text wird abgelehnt');
+chk(ev("parseShare('#r='+b64e({ppm:{mg:'x',ca:-5,na:99999,k:null},unit:'zz',drop:'evil',name:'a'.repeat(500)}))") && ev("(()=>{const r=parseShare('#r='+b64e({ppm:{mg:'x',ca:-5,na:99999,k:null},unit:'zz',drop:'evil',name:'a'.repeat(500)}));return r.ppm.mg===0&&r.ppm.ca===0&&r.ppm.na===2000&&r.unit=='l'&&r.drop=='round'&&r.name.length==60})()"), 'Import bereinigt ungültige Werte');
+ev("window.sh='';mode='list';cur=null;render()");
+
+// --- Cupping, Mülleimer, Glossar
+chk(ev("S.methods.includes('Cupping')&&DM.includes('Cupping')"), 'Cupping ist Standardmethode');
+ev("window.sh='';mode='list';cur=null;render();window.sh='menu';render()");
+chk(!!w.document.querySelector('#otr') && !!w.document.querySelector('#og'), 'Menü enthält Mülleimer und Glossar');
+ev("window.sh='';render()");
+const nR = ev('R.length'), nm3 = ev('R[R.length-1].name');
+ev("window.dl=R[R.length-1].id;window.sh='del';render();document.querySelector('#dy').click()");
+chk(ev('R.length') == nR - 1 && ev('S.trash.length') == 1, 'Gelöschtes Rezept landet im Mülleimer');
+ev("window.sh='trash';render()");
+chk(w.document.querySelectorAll('[data-tr]').length == 1 && /Noch 10 Tage/.test(w.document.querySelector('.sh').textContent), 'Mülleimer zeigt Rezept mit Restzeit');
+ev("document.querySelector('[data-tr]').click()");
+chk(ev('R.length') == nR && ev('S.trash.length') == 0 && ev('R[0].name') == nm3, 'Wiederherstellen bringt das Rezept zurück');
+ev("S.trash=[{r:JSON.parse(JSON.stringify(R[0])),t:Date.now()-11*864e5},{r:JSON.parse(JSON.stringify(R[1])),t:Date.now()-9*864e5}]");
+chk(ev('purgeTrash()') === true && ev('S.trash.length') == 1, 'Nach 10 Tagen leert sich der Mülleimer selbst');
+ev("S.trash=[];window.sh='gloss';render()");
+chk(w.document.querySelectorAll('.gl').length >= 10, 'Glossar zeigt Begriffe');
+ev("window.sh='';mode='list';cur=null;render()");
+
+// --- Wischen zum Löschen: rote Fläche bleibt, Abbrechen / Löschen
+ev("window.dl=R[0].id;window.sh='del';render()");
+chk(ev("document.querySelector('.swc[data-w=\"'+R[0].id+'\"] .rc').style.transform") == 'translateX(-96px)' && ev("document.querySelector('.swc[data-w=\"'+R[0].id+'\"] .dlb').style.opacity") == '1', 'Rückfrage offen: Karte bleibt aufgeschoben, rote Fläche sichtbar');
+ev("document.querySelector('#dn').click()");
+chk(ev("window.sh") === '' && ev("document.querySelector('.rc').style.transform") === '', 'Abbrechen: Karte kehrt an ihren Platz zurück');
+const nR2 = ev('R.length');
+ev("window.dl=R[0].id;window.sh='del';render();document.querySelector('#dy').click()");
+chk(ev('R.length') == nR2 - 1 && ev('S.trash.length') >= 1, 'Löschen bestätigt: Rezept entfernt und im Mülleimer');
+ev("S.trash=[];window.sh='';mode='list';cur=null;render()");
+
+// --- Rückfrage ohne Neuzeichnen der Liste
+ev("window.sh='';mode='list';cur=null;render()");
+ev("window.__cardEl=document.querySelector('.swc');document.querySelector('.rc').style.transform='translateX(-96px)';document.querySelector('.dlb').style.opacity=1;delOpen(document.querySelector('.swc').dataset.w)");
+chk(ev("window.sh")=='del' && !!w.document.querySelector('.sh #dy') && ev("document.querySelector('.swc')===window.__cardEl"), 'Rückfrage erscheint, ohne die Liste neu zu zeichnen');
+ev("document.querySelector('#dn').click()");
+chk(ev("window.sh")==='' && ev("document.querySelector('.swc')===window.__cardEl") && ev("document.querySelector('.rc').style.transform")==='', 'Abbrechen ohne Neuzeichnen: dieselbe Karte schwingt zurück');
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);
