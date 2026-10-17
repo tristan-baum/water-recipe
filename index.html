@@ -114,7 +114,7 @@ html.tu .sh{max-height:55vh}
 .ctb>div{padding:9px 0;border-top:1px solid #8883;display:flex;align-items:center;gap:8px}
 .ctb>div.h{border-top:0;font-size:11px;color:var(--mu);padding:0 0 6px;justify-content:flex-end}
 .ctb>div.v{justify-content:flex-end;font-weight:500}
-.chn .k1,.chn .k2{width:10px;height:10px;box-sizing:border-box}.chn .k1{background:var(--tx)}.chn .k2{border:1.5px dashed var(--tx);background:none}
+.chn .k1,.chn .k2{width:10px;height:10px;box-sizing:border-box}.chn .k1{background:var(--tx)}.chn .k2{width:12px;height:12px;border:2px dashed var(--ac);background:none;box-shadow:0 0 0 1px #8888}
 .dl{width:10px;text-align:center;color:var(--mu);font-size:12px}
 .cpl{background:var(--tx);color:var(--card);border-radius:99px;padding:1px 8px;font-size:12px;font-weight:600}
 .gl{padding:12px 0;border-top:1px solid #8883}.gl:first-of-type{border-top:0;padding-top:2px}.gl b{display:block;font-size:15px;margin-bottom:3px}.gl p{margin:0;font-size:13.5px;line-height:1.45;opacity:.8}
@@ -122,12 +122,12 @@ html.tu .sh{max-height:55vh}
 
 .rc .in,.gv .in,.gvh .in{min-width:0;max-width:100%}
 .nm .w{display:inline-block;max-width:100%;overflow-wrap:anywhere}
-.fh{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;border-top:1px solid #8883;color:inherit;font:inherit;font-weight:600;font-size:15px;padding:14px 0 12px;text-align:left;cursor:pointer}
-.sh h3+.fh{border-top:0}
-.fh small{margin-left:auto;font-weight:400;color:var(--mu);font-size:12px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fcv{display:grid;place-items:center;transform:rotate(-90deg);transition:transform .25s}.fcv.o{transform:none}
-.fb{display:grid;grid-template-rows:1fr;transition:grid-template-rows .3s cubic-bezier(.32,.72,0,1)}.fb.c{grid-template-rows:0fr}
-.fb>.fi{overflow:hidden;min-height:0;padding-bottom:6px}
+.xfh{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;border-top:1px solid #8883;color:inherit;font:inherit;font-weight:600;font-size:15px;padding:14px 0 12px;text-align:left;cursor:pointer}
+.sh h3+.xfh{border-top:0}
+.xfh small{margin-left:auto;font-weight:400;color:var(--mu);font-size:12px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xfcv{display:grid;place-items:center;transform:rotate(-90deg);transition:transform .25s}.xfcv.o{transform:none}
+.xfb{display:grid;grid-template-rows:1fr;transition:grid-template-rows .3s cubic-bezier(.32,.72,0,1)}.xfb.c{grid-template-rows:0fr}
+.xfb>.xfi{overflow:hidden;min-height:0;padding-bottom:6px}
 .mc.dis{opacity:.4;pointer-events:none}
 .rs{margin:0 0 4px}.rl{display:flex;justify-content:flex-end;font-size:12px;color:var(--mu);margin:0 2px 2px}
 .rb{position:relative;height:36px}
@@ -220,7 +220,7 @@ function chart2(c,q,T){const xm=Math.max(100,Math.ceil((Math.max(T.kh,q.kh,c.kh)
 for(let v=0;v<=xm;v+=20){const x=X(v);if(v>0&&v<xm)g+=`<line x1='${x}' x2='${x}' y1='${y0}' y2='${y1}'/>`;if(Math.abs(x-px)>18)lb+=`<text x='${x}' y='${y1+20}' text-anchor='middle'>${v}</text>`}
 for(let v=0;v<=ym;v+=40){const y=Y(v);if(v>0&&v<ym)g+=`<line x1='${x0}' x2='${x1}' y1='${y}' y2='${y}'/>`;if(Math.abs(y-py)>12)lb+=`<text x='${x0-8}' y='${y+4}' text-anchor='end'>${v}</text>`}
 const far=Math.hypot(qx-px,qy-py)>12,dg=q.gh-T.gh,dk=q.kh-T.kh,sg=x=>(x<0?'\u2212':'+')+f(Math.abs(x),1),cl=d=>Math.abs(d)>=.5?`<span class='cpl'>${sg(d)}</span>`:`<span style='color:var(--mu)'>${sg(d)}</span>`;
-return `<div class='chn'><div class='chh'><div><small>Hardness</small><span class='dot'>${f(T.gh,0)}</span></div><div><small>Alkalinity</small><span class='dot'>${f(T.kh,0)}</span></div><span class='un'>ppm CaCO\u2083</span></div><svg viewBox='0 0 312 204' role='img' aria-label='Hardness ${f(T.gh,0)}, Alkalinity ${f(T.kh,0)} ppm CaCO3'><rect x='${x0}' y='${y0}' width='${x1-x0}' height='${y1-y0}' rx='16' style='fill:var(--in)'/><g style='stroke:var(--tx);stroke-opacity:.07'>${g}</g><g style='fill:var(--mu);font-size:10px'>${lb}</g><path d='M${px} ${py}V${y1}M${px} ${py}H${x0}' style='stroke:var(--tx);stroke-opacity:.35' stroke-dasharray='2 4' stroke-linecap='round' fill='none'/>${far?`<line x1='${px}' y1='${py}' x2='${qx}' y2='${qy}' style='stroke:var(--tx);stroke-opacity:.45'/>`:''}<circle cx='${qx}' cy='${qy}' r='8' fill='none' style='stroke:var(--tx)' stroke-width='1.6' stroke-dasharray='2.5 2.5'/><circle cx='${px}' cy='${py}' r='14' style='fill:var(--ac)' fill-opacity='.55'/><circle cx='${px}' cy='${py}' r='5' style='fill:var(--tx)'/><g style='fill:var(--tx)'><rect x='${px-15}' y='${y1+8}' width='30' height='18' rx='9'/><rect x='1' y='${py-9}' width='30' height='18' rx='9'/></g><g style='fill:var(--card);font-size:11px;font-weight:500' text-anchor='middle'><text x='${px}' y='${y1+21}'>${f(T.kh,0)}</text><text x='16' y='${py+4}'>${f(T.gh,0)}</text></g></svg><div class='ctb'><div class='h'></div><div class='h'>Hardness</div><div class='h'>Alkalinity</div><div><i class='k1'></i>${t('tgt')}</div><div class='v'>${f(T.gh,1)}</div><div class='v'>${f(T.kh,1)}</div><div><i class='k2'></i>${t('rnd')}</div><div class='v'>${f(q.gh,1)}</div><div class='v'>${f(q.kh,1)}</div><div><span class='dl'>\u0394</span>${t('diff')}</div><div class='v'>${cl(dg)}</div><div class='v'>${cl(dk)}</div></div></div>`}
+return `<div class='chn'><div class='chh'><div><small>Hardness</small><span class='dot'>${f(T.gh,0)}</span></div><div><small>Alkalinity</small><span class='dot'>${f(T.kh,0)}</span></div><span class='un'>ppm CaCO\u2083</span></div><svg viewBox='0 0 312 204' role='img' aria-label='Hardness ${f(T.gh,0)}, Alkalinity ${f(T.kh,0)} ppm CaCO3'><rect x='${x0}' y='${y0}' width='${x1-x0}' height='${y1-y0}' rx='16' style='fill:var(--in)'/><g style='stroke:var(--tx);stroke-opacity:.07'>${g}</g><g style='fill:var(--mu);font-size:10px'>${lb}</g><path d='M${px} ${py}V${y1}M${px} ${py}H${x0}' style='stroke:var(--tx);stroke-opacity:.35' stroke-dasharray='2 4' stroke-linecap='round' fill='none'/>${far?`<line x1='${px}' y1='${py}' x2='${qx}' y2='${qy}' style='stroke:var(--tx);stroke-opacity:.45'/>`:''}<circle cx='${px}' cy='${py}' r='5' style='fill:var(--tx)'/><circle cx='${qx}' cy='${qy}' r='7.5' fill='none' style='stroke:var(--tx)' stroke-opacity='.25' stroke-width='4.2'/><circle cx='${qx}' cy='${qy}' r='7.5' fill='none' style='stroke:var(--ac)' stroke-width='2.4' stroke-dasharray='3.2 2.4'/><g style='fill:var(--tx)'><rect x='${px-15}' y='${y1+8}' width='30' height='18' rx='9'/><rect x='1' y='${py-9}' width='30' height='18' rx='9'/></g><g style='fill:var(--card);font-size:11px;font-weight:500' text-anchor='middle'><text x='${px}' y='${y1+21}'>${f(T.kh,0)}</text><text x='16' y='${py+4}'>${f(T.gh,0)}</text></g></svg><div class='ctb'><div class='h'></div><div class='h'>Hardness</div><div class='h'>Alkalinity</div><div><i class='k1'></i>${t('tgt')}</div><div class='v'>${f(T.gh,1)}</div><div class='v'>${f(T.kh,1)}</div><div><i class='k2'></i>${t('rnd')}</div><div class='v'>${f(q.gh,1)}</div><div class='v'>${f(q.kh,1)}</div><div><span class='dl'>\u0394</span>${t('diff')}</div><div class='v'>${cl(dg)}</div><div class='v'>${cl(dk)}</div></div></div>`}
 function compare(){const [a,b]=sel.map(i=>R.find(r=>r.id==i));if(!a||!b){mode='list';return render()}const A=calc(a),B=calc(b);
 const rows=[['Mg ppm',a.ppm.mg,b.ppm.mg],['Ca ppm',a.ppm.ca,b.ppm.ca],['Na ppm',a.ppm.na,b.ppm.na],['K ppm',a.ppm.k,b.ppm.k],['GH',A.gh,B.gh],['KH',A.kh,B.kh],['TDS',A.tds,B.tds],[t('alk')+' meq/L',A.meq,B.meq],['Mg',A.mg,B.mg],['Ca',A.ca,B.ca],['Na',A.na,B.na],['K',A.k,B.k],['Cl',A.cl,B.cl],['HCO3',A.hco3,B.hco3]];
 $('#v').innerHTML=`<button class="pill" id="bk" style="margin-bottom:12px">← ${t('back')}</button><div class="card wrap"><table><tr><th>${t('val')}</th><th>${esc(a.name)}</th><th>${esc(b.name)}</th></tr>${rows.map(x=>`<tr><td>${x[0]}</td><td>${f(x[1])}</td><td>${f(x[2])}</td></tr>`).join('')}</table></div>`;$('#bk').onclick=()=>{mode='list';render()}}
@@ -231,7 +231,7 @@ P.hi=`<circle cx='12' cy='12' r='9'/><path d='M12 11v5'/><path d='M12 7.8v.01'/>
 P.im=`<path d='M12 4v11'/><path d='M8 11l4 4 4-4'/><path d='M5 19h14'/>`;
 P.bo=`<path d='M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z'/><path d='M5 17a3 3 0 0 1 3-3h11'/>`;
 P.rs=`<path d='M9 14L4 9l5-5'/><path d='M4 9h10a6 6 0 0 1 0 12h-3'/>`;
-P.cv=`<path d='M6 9l6 6 6-6'/>`;
+P.xcv=`<path d='M6 9l6 6 6-6'/>`;
 P.bk=`<path d='M15 5l-7 7 7 7'/>`;
 const gi=id=>[...id].reduce((a,c)=>a+c.charCodeAt(0),0)%4;
 const mkS=(z,w,n=30)=>{const wd=w*Math.sqrt(1-z*z);return Array.from({length:n+1},(_,i)=>{const t=i/n;return i==n?1:1-Math.exp(-z*w*t)*(Math.cos(wd*t)+z*w/wd*Math.sin(wd*t))})};
@@ -319,7 +319,7 @@ if(o=='flt'){const v=S.vf,fc=S.fc||(S.fc={}),sk=v.sort=='own'?'own':v.sort.split
 mxh=Math.max(160,Math.ceil(Math.max(0,...R.map(r=>tg(r).gh))/10)*10),mxa=Math.max(100,Math.ceil(Math.max(0,...R.map(r=>tg(r).kh))/10)*10),
 sorts=[['own',t('sown')],['alk',t('alk')],['hd','Hardness'],['rt',t('rate')]],
 rng=(a,b,mn,mx,u,p)=>(!nz(a)&&!nz(b))?t('rall'):(p||'')+(nz(a)?a:mn)+' – '+(nz(b)?b:mx)+u,
-sec=(id,ti,sm,body)=>`<button class='fh' data-fs='${id}' type='button'><span>${ti}</span><small>${sm}</small><i class='fcv ${fc[id]?'':'o'}'>${IC(P.cv,16)}</i></button><div class='fb ${fc[id]?'c':''}'><div class='fi'>${body}</div></div>`,
+sec=(id,ti,sm,body)=>`<button class='xfh' data-fs='${id}' type='button'><span>${ti}</span><small>${sm}</small><i class='xfcv ${fc[id]?'':'o'}'>${IC(P.xcv,16)}</i></button><div class='xfb ${fc[id]?'c':''}'><div class='xfi'>${body}</div></div>`,
 chip=(at,val,lb,on,dis)=>`<button type='button' class='mc ${on?'on':''}${dis?' dis':''}' ${at}='${val}'>${lb}</button>`,
 sl=(k,mn,mx,lo,hi,u)=>`<div class='rs' data-rk='${k}' data-min='${mn}' data-max='${mx}' data-u='${u}'><div class='rl'><span class='rv'></span></div><div class='rb'><div class='rt'><i class='rf'></i></div><input type='range' min='${mn}' max='${mx}' step='1' value='${lo}' aria-label='${t('mn')}'><input type='range' min='${mn}' max='${mx}' step='1' value='${hi}' aria-label='${t('mx')}'></div></div>`;
 sh=`<h3>${t('flt')}</h3>`
@@ -352,7 +352,7 @@ if($('#dwy')){$('#dwy').onclick=()=>{const id=window.dw;S.waters=S.waters.filter
 if($('#fl'))$('#fl').onclick=()=>go(o=='flt'?'':'flt');
 on('[data-sc]',b=>b.onclick=()=>{const c=b.dataset.sc;S.vf.sort=c=='own'?'own':c+'_'+(S.vf.dir||'asc');save();render()});
 on('[data-sdr]',b=>b.onclick=()=>{S.vf.dir=b.dataset.sdr;if(S.vf.sort!='own')S.vf.sort=S.vf.sort.split('_')[0]+'_'+S.vf.dir;save();render()});
-on('[data-fs]',b=>b.onclick=()=>{const id=b.dataset.fs,c=(S.fc=S.fc||{});c[id]=!c[id];save();b.nextElementSibling.classList.toggle('c',!!c[id]);b.querySelector('.fcv').classList.toggle('o',!c[id])});
+on('[data-fs]',b=>b.onclick=()=>{const id=b.dataset.fs,c=(S.fc=S.fc||{});c[id]=!c[id];save();b.nextElementSibling.classList.toggle('c',!!c[id]);b.querySelector('.xfcv').classList.toggle('o',!c[id])});
 document.querySelectorAll('.rs').forEach(rsInit);
 on('[data-fm]',b=>b.onclick=()=>{const m=b.dataset.fm,a=S.vf.meth;S.vf.meth=a.includes(m)?a.filter(x=>x!=m):[...a,m];save();render()});
 if($('#frs'))$('#frs').onclick=()=>{S.vf={sort:'own',dir:'asc',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:0,rmax:''};save();render()};
@@ -441,7 +441,7 @@ const TT={de:[
 ["Ausgangswasser","Tippe auf die Karte, um sie aufzuklappen. Wähle dein Wasser (Standard: destilliertes Wasser) oder gib eigene Werte ein und speichere sie als neues Wasser. Enthält es schon Mineralien, brauchst du weniger Tropfen. Liegt es über dem Ziel, erscheint ein Hinweis, und der Zielwert bleibt unverändert."],
 ["Tropfen","So viele Tropfen jedes Konzentrats gehören ins Wasser, als ganze Zahl. Darunter steht der exakte Wert.\nDie Namen sind englisch, genau wie auf den Flaschen. Das „i“ erklärt sie."],
 ["Kennwerte","Hardness und Alkalinity in ppm und in Grad, dazu die gelösten Feststoffe (TDS) und die Alkalinität in meq/L, jeweils für dein Rezept inklusive Ausgangswasser."],
-["Diagramm","Der Punkt zeigt dein Ziel aus Hardness und Alkalinity. Der gestrichelte Ring zeigt das Ergebnis mit ganzen Tropfen, Δ ist die Differenz dazu."],
+["Diagramm","Der Punkt zeigt dein Ziel aus Hardness und Alkalinity. Der grüne gestrichelte Ring zeigt das Ergebnis mit ganzen Tropfen, Δ ist die Differenz dazu."],
 ["Ionen","Die Ionenkonzentrationen in mg pro Liter: Magnesium, Calcium, Natrium, Kalium, Chlorid und HCO₃."],
 ["Bewertung und Notizen","Vergib Sterne, wähle eine oder mehrere Brühmethoden und notiere, wie dir das Wasser geschmeckt hat."],
 ["Aktionen","Von links nach rechts: Löschen (das Rezept bleibt 10 Tage im Mülleimer im Menü), Teilen (per Link, der Empfänger fügt ihn im Menü unter „Rezept importieren“ ein), Duplizieren und Bearbeiten (der Stift sperrt die Zielwerte)."],
@@ -460,7 +460,7 @@ en:[
 ["Source water","Tap the card to expand it. Choose your water (default: distilled water) or enter your own values and save them as a new water. If it already contains minerals you need fewer drops. If it exceeds the target, a notice appears and the target value stays unchanged."],
 ["Drops","This is how many drops of each concentrate go into the water, as a whole number. The exact value is shown below.\nThe names match the labels on the bottles. The “i” explains them."],
 ["Key figures","Hardness and Alkalinity in ppm and in degrees, plus total dissolved solids (TDS) and alkalinity in meq/L, each for your recipe including the source water."],
-["Chart","The dot shows your target in Hardness and Alkalinity. The dashed ring shows the result with whole drops, Δ is the difference."],
+["Chart","The dot shows your target in Hardness and Alkalinity. The green dashed ring shows the result with whole drops, Δ is the difference."],
 ["Ions","The ion concentrations in mg per litre: magnesium, calcium, sodium, potassium, chloride and HCO₃."],
 ["Rating and notes","Give stars, pick one or more brew methods and note how the water tasted."],
 ["Actions","From left to right: delete (the recipe stays 10 days in the menu's trash), share (via link, the recipient pastes it under Menu › Import recipe), duplicate and edit (the pencil locks the target values)."],

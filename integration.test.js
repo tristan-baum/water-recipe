@@ -183,7 +183,8 @@ chk(ev('S.vf.rmax') == 3 && ev('vlist().every(r=>(r.rating||0)<=3)'), 'Bewertung
 ev("document.querySelector('#frs').click()");
 chk(ev('vfOn()') === false, 'Zurücksetzen leert alle Slider-Filter');
 ev("window.sh='';mode='list';render()");
-chk(w.document.querySelectorAll('.nm.mq').length >= 1, 'Rezeptnamen laufen in einer Zeile (Laufschrift bei Überlänge)');
+chk(w.document.querySelectorAll('.rc .nm .w').length >= 3, 'Rezeptnamen bestehen aus einzelnen Wörtern und dürfen umbrechen');
+chk(ev("(()=>{const m=snap();vflip(m);return Object.keys(m).length>0&&Array.isArray(m[Object.keys(m)[0]].w)})()"), 'Ansichtswechsel animiert die Wörter an ihre neue Position');
 
 // --- Fenster: Wischen
 ev("window.cm=true;sel=[R[0].id,R[1].id];window.sh='cmp';render()");
@@ -202,6 +203,23 @@ chk(ev('window.sh') == 'menu', 'Nach rechts wischen geht im Menü einen Schritt 
 }
 chk(ev('window.sh') == 'menu', 'Im Hauptmenü gibt es kein Zurück per Wischen');
 ev("window.sh='';mode='list';render()");
+
+// --- Menü: Höhe und Inhalt werden beim Wechsel animiert
+ev("window.sh='';mode='list';cur=null;render();window.sh='menu';render()");
+ev("window.sh='meth';render()");
+chk(w.document.querySelectorAll('.sh.gs > .cpb').length == 2, 'Menüwechsel: alter Inhalt blendet aus, neuer gleitet ein');
+ev("window.sh='menu';render()");
+chk(w.document.querySelectorAll('.sh.gs > .cpb').length == 2, 'Zurück ins Menü wird ebenfalls animiert');
+ev("window.sh='';mode='list';render()");
+
+// --- Grafik: kein grüner Punkt, gestrichelter Ring in Grün über dem Ziel
+ev("cur=R[0].id;mode='d';render()");
+{
+  const svg = w.document.querySelector('#ch svg').innerHTML;
+  chk(!/r="14"/.test(svg) && /stroke:var\(--ac\)/.test(svg) && /stroke-dasharray="3.2 2.4"/.test(svg), 'Grafik: grüner gestrichelter Ring, kein grüner Punkt');
+  chk(svg.indexOf('r="5"') < svg.indexOf('r="7.5"'), 'Grafik: Ring liegt über dem Zielpunkt');
+}
+ev("mode='list';cur=null;render()");
 chk(/user-scalable=no/.test(html), 'Zoom ist gesperrt');
 chk(errors.length == 0, 'keine Skriptfehler' + (errors.length ? ': ' + errors.join(' | ') : ''));
 process.exit(ok ? 0 : 1);
