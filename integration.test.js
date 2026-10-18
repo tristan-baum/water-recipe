@@ -1,5 +1,5 @@
 // Integrationstest: startet die App in einem simulierten Browser (jsdom) und prueft
-// Speichern nach Neustart, Ansicht, Ausgangswasser, Filter/Sortierung u. a.
+// Speichern nach Neustart, Ansicht, Basiswasser, Filter/Sortierung u. a.
 // Voraussetzung: npm install   (installiert jsdom)   dann: npm run test:integration
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
@@ -41,8 +41,8 @@ ev("document.querySelector('.rc[data-o]').click()");
 chk(!w.document.querySelector('#bk'), 'Rezeptseite hat kein X mehr');
 ev("document.querySelector('[data-sk=\"mg\"]').value='20';document.querySelector('[data-sk=\"mg\"]').dispatchEvent(new Event('input'))");
 ev("document.querySelector('#wn').value='Leitungswasser';document.querySelector('#wsb').click()");
-chk(ev('S.waters.length') == 1 && ev('R.find(x=>x.id==cur).wid') == ev('S.waters[0].id'), 'Eigenes Ausgangswasser gespeichert und im Rezept gewaehlt');
-st = dump(w); w = boot(st); chk(ev('S.waters.length') == 1, 'Ausgangswasser ueberlebt Neustart');
+chk(ev('S.waters.length') == 1 && ev('R.find(x=>x.id==cur).wid') == ev('S.waters[0].id'), 'Eigenes Basiswasser gespeichert und im Rezept gewaehlt');
+st = dump(w); w = boot(st); chk(ev('S.waters.length') == 1, 'Basiswasser ueberlebt Neustart');
 ev("S.vf={sort:'alk_asc',meth:[],amin:'',amax:''}");
 const asc = JSON.parse(ev('JSON.stringify(vlist().map(r=>Math.round(calc(r).kh)))'));
 chk(asc.every((v, i) => i == 0 || v >= asc[i - 1]), 'Sortierung nach Alkalinitaet aufsteigend');
@@ -67,7 +67,7 @@ ev("S.vf={sort:'hd_asc',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:2}");
 const hd = JSON.parse(ev('JSON.stringify(vlist().map(r=>tg(r).gh))'));
 chk(hd.every((v, i) => i == 0 || v >= hd[i - 1]) && ev('vlist().every(r=>r.rating>=2)'), 'Hardness-Sortierung und Mindestbewertung');
 ev("S.vf={sort:'own',meth:[],amin:'',amax:'',hmin:'',hmax:'',rmin:0};R[0].sc=true;R[0].src={mg:100,ca:0,na:0,k:0,cl:0,hco3:0};window.sh='';render()");
-chk(w.document.querySelectorAll('.rc .ov').length >= 1 && /^\+\d+$/.test(w.document.querySelector('.rc .ov').textContent), 'Ausgangswasser über dem Ziel ist in der Übersicht als +Differenz markiert');
+chk(w.document.querySelectorAll('.rc .ov').length >= 1 && /^\+\d+$/.test(w.document.querySelector('.rc .ov').textContent), 'Basiswasser über dem Ziel ist in der Übersicht als +Differenz markiert');
 chk(ev('Math.round(tg(R[0]).gh)') == ev('Math.round(R[0].ppm.mg+0.929*R[0].ppm.ca)'), 'Zielwert bleibt unverändert');
 ev("window.sh='new';render()");
 const nm = JSON.parse(ev("JSON.stringify([...document.querySelectorAll('[data-c]')].map(b=>b.textContent))"));
@@ -216,7 +216,7 @@ ev("window.sh='';mode='list';render()");
 ev("cur=R[0].id;mode='d';render()");
 {
   const svg = w.document.querySelector('#ch svg').innerHTML;
-  chk(!/r="14"/.test(svg) && /stroke:var\(--ac\)/.test(svg) && /stroke-dasharray="3.2 2.4"/.test(svg), 'Grafik: grüner gestrichelter Ring, kein grüner Punkt');
+  chk(!/r="14"/.test(svg) && /stroke:var\(--ac\)/.test(svg) && /stroke-dasharray="2 3"/.test(svg) && /stroke-linecap="round"/.test(svg) && !/stroke-opacity="\.25"/.test(svg), 'Grafik: grüner gestrichelter Ring, kein grüner Punkt');
   chk(svg.indexOf('r="5"') < svg.indexOf('r="7.5"'), 'Grafik: Ring liegt über dem Zielpunkt');
 }
 ev("mode='list';cur=null;render()");
